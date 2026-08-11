@@ -16,7 +16,7 @@
 
 <table align="center">
 <tr>
-<td align="center"><b>Linguagens & Frameworks</b></td>
+<td align="center"><b>Languages ​​and Frameworks</b></td>
 <td align="center"><b>Operacional System</b></td>
 </tr>
 <tr>
@@ -28,8 +28,8 @@
 </td>
 </tr>
 <tr>
-<td align="center"><b>Ferramentas & Infra</b></td>
-<td align="center"><b>IA & Assistentes</b></td>
+<td align="center"><b>Tools & Infrastructure</b></td>
+<td align="center"><b>AI and Assistants</b></td>
 </tr>
 <tr>
 <td align="center">
