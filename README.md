@@ -50,8 +50,8 @@
 
 <div align="center">
 
-<a href="mailto:joaovitordevv.py@gmail.com"><img src="https://img.shields.io/badge/joaovitordevv.py@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="E-mail" /></a>
-<a href="https://www.linkedin.com/in/joãovitorbsouza"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
+<a href="mailto:joaovitordevv.py@gmail.com"><img src="https://img.shields.io/badge/Gmail-EA4335?style=flat-square&logo=gmail&logoColor=white" alt="Gmail" /></a>
+<a href="https://www.linkedin.com/in/joãovitorbsouza"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
 
 </div>
 
