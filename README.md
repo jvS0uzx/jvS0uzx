@@ -33,7 +33,11 @@
 </tr>
 <tr>
 <td align="center">
-<img src="https://skillicons.dev/icons?i=postgres,redis,docker,nginx,githubactions,git,postman,notion,obsidian&perline=3" />
+<img src="https://skillicons.dev/icons?i=postgres,redis,docker,nginx,githubactions&perline=5" />
+<br>
+<img src="https://skillicons.dev/icons?i=git,postman,notion,obsidian&perline=4" />
+<!-- Telegram vem do simpleicons: o skillicons.dev não tem esse ícone. -->
+<img src="https://cdn.simpleicons.org/telegram" width="48" height="48" alt="Telegram" />
 </td>
 <td align="center">
 <img src="https://cdn.simpleicons.org/claudecode" width="48" height="48" alt="Claude Code" />&nbsp;&nbsp;
@@ -41,5 +45,14 @@
 </td>
 </tr>
 </table>
+
+<br>
+
+<div align="center">
+
+<a href="mailto:joaovitordevv.py@gmail.com"><img src="https://img.shields.io/badge/joaovitordevv.py@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="E-mail" /></a>
+<a href="https://www.linkedin.com/in/joãovitorbsouza"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
+
+</div>
 
 <br>
