@@ -21,7 +21,7 @@
 </tr>
 <tr>
 <td align="center">
-<img src="https://skillicons.dev/icons?i=py,django,ts,nodejs" />
+<img src="https://skillicons.dev/icons?i=go,py,django,ts,react,vite,tailwind,nodejs,java&perline=5" />
 </td>
 <td align="center">
 <img src="https://skillicons.dev/icons?i=arch,ubuntu,linux" />
@@ -33,7 +33,7 @@
 </tr>
 <tr>
 <td align="center">
-<img src="https://skillicons.dev/icons?i=postgres,redis,docker,nginx,notion,postman,obsidian,git&perline=4" />
+<img src="https://skillicons.dev/icons?i=postgres,redis,docker,nginx,githubactions,git,postman,notion,obsidian&perline=3" />
 </td>
 <td align="center">
 <img src="https://cdn.simpleicons.org/claudecode" width="48" height="48" alt="Claude Code" />&nbsp;&nbsp;
