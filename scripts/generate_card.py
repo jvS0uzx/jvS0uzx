@@ -20,7 +20,7 @@ PROFILE_FIELDS = [
     ("Ambiente", "arch linux, ubuntu, debian, git"),
     ("Ferramentas", "postman, notion, obsidian, telegram"),
     ("Contato.GitHub", f"github.com/{LOGIN}"),
-    ("Contato.Email", "joaovitordevv.py@gmail.com"),
+    ("Contato.Email", "joaovitordev.py@gmail.com"),
 ]
 
 BG_COLOR = "#0b1120"

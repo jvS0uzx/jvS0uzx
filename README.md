@@ -34,7 +34,7 @@
   <a href="https://github.com/jvS0uzx">
     <img src="https://img.shields.io/badge/GitHub-000000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
   </a>
-  <a href="mailto:joaovitordevv.py@gmail.com">
+  <a href="mailto:joaovitordev.py@gmail.com">
     <img src="https://img.shields.io/badge/Gmail-000000?style=for-the-badge&logo=gmail&logoColor=EA4335" alt="Gmail"/>
   </a>
   <a href="https://www.linkedin.com/in/joãovitorbsouza">
