@@ -21,10 +21,10 @@
 </tr>
 <tr>
 <td align="center">
-<img src="https://skillicons.dev/icons?i=go,py,django,ts,react,vite,tailwind,nodejs,java&perline=5" />
+<img src="https://skillicons.dev/icons?i=py,django,go,ts,react,nodejs&perline=3" />
 </td>
 <td align="center">
-<img src="https://skillicons.dev/icons?i=arch,ubuntu,linux" />
+<img src="https://skillicons.dev/icons?i=arch,ubuntu,debian,linux&perline=2" />
 </td>
 </tr>
 <tr>
