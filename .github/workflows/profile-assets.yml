@@ -1,0 +1,91 @@
+name: Refresh profile assets
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+
+    paths-ignore:
+      - 'assets/profile.svg'
+      - 'assets/contributions.png'
+      - 'assets/private-contributions.svg'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout isometric renderer
+        uses: actions/checkout@v4
+        with:
+          repository: Spectrewolf8/GitHub-Contributions-Isometric-3D-Graphs-Embed
+          ref: 975607fde698d0d8b90fcb1b10e14cbc81b50c7f
+          path: .isometric
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: |
+          pip install pillow requests
+          npm ci --prefix .isometric --no-audit --no-fund
+      - name: Generate animated profile card
+        env:
+          GITHUB_LOGIN: jvS0uzx
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUT_PATH: assets/profile.svg
+        run: python scripts/generate_card.py
+      - name: Generate contributions graph
+        env:
+          GITHUB_LOGIN: jvS0uzx
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISOMETRIC_DIR: .isometric
+          OUT_DIR: assets
+        run: node scripts/generate_contributions.mjs
+      - name: Upload assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: profile-assets
+          path: |
+            assets/profile.svg
+            assets/contributions.png
+            assets/private-contributions.svg
+          retention-days: 1
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Download assets
+        uses: actions/download-artifact@v4
+        with:
+          name: profile-assets
+          path: assets
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/profile.svg assets/contributions.png assets/private-contributions.svg
+          git diff --staged --quiet || git commit -m "chore: refresh profile assets"
+          git push
