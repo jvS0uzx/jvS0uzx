@@ -37,7 +37,7 @@
   <a href="mailto:joaovitordev.py@gmail.com">
     <img src="https://img.shields.io/badge/Gmail-000000?style=for-the-badge&logo=gmail&logoColor=EA4335" alt="Gmail"/>
   </a>
-  <a href="https://www.linkedin.com/in/joãovitorbsouza">
+  <a href="https://www.linkedin.com/in/joaovitorbomfimsouza">
     <img src="https://img.shields.io/badge/LinkedIn-000000?style=for-the-badge&logo=linkedin&logoColor=0A66C2" alt="LinkedIn"/>
   </a>
 </p>
