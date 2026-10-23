@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/profile.svg" alt="Card de perfil animado em pixel art" width="100%" />
+  <img src="assets/battle.svg" alt="Batalha Pokémon em pixel art: o Hiper Raio de um Rayquaza selvagem tira 1 HP do Snorlax, que acorda e nocauteia o Rayquaza com um Mega Push" width="100%" />
 </p>
 
 <br>
