@@ -10,11 +10,16 @@ SIMPLE_ICONS = "https://cdn.jsdelivr.net/npm/simple-icons@16.31.0"
 
 CATEGORIES = [
     ("Linguagens e Frameworks", ["python", "django", "go", "typescript", "react", "nodedotjs"]),
-    ("Dados e Infraestrutura", ["postgresql", "redis", "docker", "nginx", "githubactions"]),
-    ("Sistemas Operacionais", ["archlinux", "ubuntu", "debian", "linux"]),
+    ("Dados e Infraestrutura", ["postgresql", "redis", "docker", "nginx", "githubactions", "amazonaws"]),
+    ("Sistemas Operacionais", ["archlinux", "ubuntu", "fedora", "linux"]),
     ("Ferramentas", ["git", "postman", "notion", "obsidian", "telegram"]),
     ("IA e Assistentes", ["claudecode", "ollama"]),
 ]
+
+# O AWS saiu do simple-icons na v12, a pedido da marca; o glifo vem da última versão que o tinha.
+LEGACY_ICONS = {
+    "amazonaws": ("AWS", "232F3E", "https://cdn.jsdelivr.net/npm/simple-icons@11.15.0/icons/amazonaws.svg"),
+}
 
 TILE = 56
 TILE_RX = 16
@@ -89,8 +94,12 @@ def main():
     icons = {}
     for _, slugs in CATEGORIES:
         for slug in slugs:
-            path = re.search(r'<path d="([^"]+)"', fetch(f"{SIMPLE_ICONS}/icons/{slug}.svg")).group(1)
-            icons[slug] = (brands[slug]["title"], brands[slug]["hex"], path)
+            if slug in LEGACY_ICONS:
+                title, hex_color, url = LEGACY_ICONS[slug]
+            else:
+                title, hex_color, url = brands[slug]["title"], brands[slug]["hex"], f"{SIMPLE_ICONS}/icons/{slug}.svg"
+            path = re.search(r'<path d="([^"]+)"', fetch(url)).group(1)
+            icons[slug] = (title, hex_color, path)
 
     os.makedirs(os.path.dirname(OUT_PATH) or ".", exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8") as f:
