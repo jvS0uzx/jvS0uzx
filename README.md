@@ -6,11 +6,11 @@
 
 ---
 
-<h3 align="center">Open source</h3>
+<h3 align="center">Projetos</h3>
 
 <p align="center">
-  <a href="https://github.com/search?q=is%3Apr+is%3Amerged+is%3Apublic+author%3AjvS0uzx+-user%3AjvS0uzx&type=pullrequests">
-    <img src="assets/upstream.svg" alt="Pull requests aceitos em projetos open source de terceiros" width="100%" />
+  <a href="https://github.com/jvS0uzx?tab=repositories">
+    <img src="assets/projects.svg" alt="DockKeeper, dockkeeper_collector e docdrift, com status do último CI, release mais recente e último push" width="100%" />
   </a>
 </p>
 

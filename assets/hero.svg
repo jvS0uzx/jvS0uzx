@@ -1,6 +1,6 @@
-<svg width="880" height="540" viewBox="0 0 880 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Terminal com fastfetch: Fedora Linux 44, KDE Plasma, desenvolvedor full stack com foco em backend, automação e infra self-hosted">
+<svg width="880" height="518" viewBox="0 0 880 518" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Terminal com fastfetch: Fedora Linux 44, KDE Plasma, desenvolvedor full stack com foco em backend, automação e infra self-hosted">
   <defs>
-    <clipPath id="window"><rect x="0.5" y="0.5" width="879" height="539" rx="12"/></clipPath>
+    <clipPath id="window"><rect x="0.5" y="0.5" width="879" height="517" rx="12"/></clipPath>
     <linearGradient id="border" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#b4befe" stop-opacity="0.65"/>
       <stop offset="1" stop-color="#cba6f7" stop-opacity="0.35"/>
@@ -24,7 +24,7 @@
     }
   </style>
   <g clip-path="url(#window)">
-    <rect width="880" height="540" fill="#1e1e2e"/>
+    <rect width="880" height="518" fill="#1e1e2e"/>
     <rect width="880" height="36" fill="#181825"/>
     <line x1="0" y1="35.5" x2="880" y2="35.5" stroke="#313244"/>
   </g>
@@ -53,9 +53,8 @@
   <g class="out" style="animation-delay:1.77s"><text x="198.0" y="312" fill="#cba6f7" font-weight="700">stack</text><text x="282.0" y="312" fill="#cdd6f4" xml:space="preserve">go, python, typescript, postgres, docker, aws<tspan fill="#7f849c"></tspan></text></g>
   <g class="out" style="animation-delay:1.83s"><text x="198.0" y="356" fill="#89b4fa" font-weight="700">repos</text><text x="282.0" y="356" fill="#cdd6f4" xml:space="preserve">13 públicos<tspan fill="#7f849c"></tspan></text></g>
   <g class="out" style="animation-delay:1.87s"><text x="198.0" y="378" fill="#89b4fa" font-weight="700">contrib</text><text x="282.0" y="378" fill="#cdd6f4" xml:space="preserve">3.197 no último ano<tspan fill="#7f849c"></tspan></text></g>
-  <g class="out" style="animation-delay:1.91s"><text x="198.0" y="400" fill="#89b4fa" font-weight="700">upstream</text><text x="282.0" y="400" fill="#cdd6f4" xml:space="preserve">goreleaser, prometheus<tspan fill="#7f849c">  2 PRs aceitos</tspan></text></g>
-  <g class="out" style="animation-delay:1.94s"><text x="198.0" y="422" fill="#89b4fa" font-weight="700">ativo</text><text x="282.0" y="422" fill="#cdd6f4" xml:space="preserve">dockkeeper_collector<tspan fill="#7f849c">  há 6 dias</tspan></text></g>
-  <g class="out" style="animation-delay:2.01s"><circle cx="204.0" cy="461" r="6" fill="#45475a"/><circle cx="226.0" cy="461" r="6" fill="#f38ba8"/><circle cx="248.0" cy="461" r="6" fill="#a6e3a1"/><circle cx="270.0" cy="461" r="6" fill="#f9e2af"/><circle cx="292.0" cy="461" r="6" fill="#89b4fa"/><circle cx="314.0" cy="461" r="6" fill="#f5c2e7"/><circle cx="336.0" cy="461" r="6" fill="#94e2d5"/><circle cx="358.0" cy="461" r="6" fill="#bac2de"/></g>
-  <g class="out" style="animation-delay:2.08s"><text x="28" y="510" font-weight="700"><tspan fill="#89b4fa">~</tspan><tspan fill="#a6e3a1"> ❯</tspan></text><rect class="blink" x="61.6" y="496" width="8.4" height="18" fill="#f5e0dc"/></g>
-  <rect x="0.5" y="0.5" width="879" height="539" rx="12" fill="none" stroke="url(#border)"/>
+  <g class="out" style="animation-delay:1.91s"><text x="198.0" y="400" fill="#89b4fa" font-weight="700">ativo</text><text x="282.0" y="400" fill="#cdd6f4" xml:space="preserve">dockkeeper_collector<tspan fill="#7f849c">  há 6 dias</tspan></text></g>
+  <g class="out" style="animation-delay:1.98s"><circle cx="204.0" cy="439" r="6" fill="#45475a"/><circle cx="226.0" cy="439" r="6" fill="#f38ba8"/><circle cx="248.0" cy="439" r="6" fill="#a6e3a1"/><circle cx="270.0" cy="439" r="6" fill="#f9e2af"/><circle cx="292.0" cy="439" r="6" fill="#89b4fa"/><circle cx="314.0" cy="439" r="6" fill="#f5c2e7"/><circle cx="336.0" cy="439" r="6" fill="#94e2d5"/><circle cx="358.0" cy="439" r="6" fill="#bac2de"/></g>
+  <g class="out" style="animation-delay:2.04s"><text x="28" y="488" font-weight="700"><tspan fill="#89b4fa">~</tspan><tspan fill="#a6e3a1"> ❯</tspan></text><rect class="blink" x="61.6" y="474" width="8.4" height="18" fill="#f5e0dc"/></g>
+  <rect x="0.5" y="0.5" width="879" height="517" rx="12" fill="none" stroke="url(#border)"/>
 </svg>

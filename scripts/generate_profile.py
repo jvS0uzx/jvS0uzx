@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-import base64
 import json
 import os
-import urllib.parse
+import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from xml.sax.saxutils import escape as xml_escape
@@ -11,9 +10,14 @@ LOGIN = os.environ.get("GITHUB_LOGIN", "jvS0uzx")
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
 OUT_DIR = os.environ.get("OUT_DIR", "assets")
 
-# Corta o que não é projeto de terceiro com público de verdade: README de perfil de amigo
-# e o repositório .github da empresa, que também são públicos.
-MIN_STARS = 100
+# A descrição do GitHub é longa demais para uma linha do card; a frase curta fica aqui.
+PROJECTS = [
+    ("dock_keeper", "painel em tempo real de VPS, containers Docker e NGINX, com logs por SSE"),
+    ("dockkeeper_collector", "agente que coleta o inventário de rede e se registra por convite único"),
+    ("docdrift", "acha no Markdown caminho, link e repositório que não existem mais"),
+]
+CI_WORKFLOW = "ci.yml"
+LANGUAGE_COLORS = {"Go": "#00ADD8", "Python": "#3572A5", "TypeScript": "#3178C6", "QML": "#44A51C"}
 
 # Catppuccin Mocha, o mesmo tema do kitty e do fastfetch.
 MANTLE, BASE = "#181825", "#1e1e2e"
@@ -21,7 +25,8 @@ SURFACE0, SURFACE1 = "#313244", "#45475a"
 OVERLAY0, OVERLAY1 = "#6c7086", "#7f849c"
 SUBTEXT0, SUBTEXT1, TEXT = "#a6adc8", "#bac2de", "#cdd6f4"
 LAVENDER, MAUVE, BLUE, GREEN = "#b4befe", "#cba6f7", "#89b4fa", "#a6e3a1"
-RED, YELLOW, PINK, TEAL, ROSEWATER = "#f38ba8", "#f9e2af", "#f5c2e7", "#94e2d5", "#f5e0dc"
+RED, PEACH, YELLOW = "#f38ba8", "#fab387", "#f9e2af"
+PINK, TEAL, ROSEWATER = "#f5c2e7", "#94e2d5", "#f5e0dc"
 TERMINAL_COLORS = [SURFACE1, RED, GREEN, YELLOW, BLUE, PINK, TEAL, SUBTEXT1]
 
 MONO = "'JetBrains Mono', 'Cascadia Code', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace"
@@ -51,8 +56,6 @@ ABOUT = [
     ("foco", "backend, automação e infra self-hosted"),
     ("stack", "go, python, typescript, postgres, docker, aws"),
 ]
-
-MONTHS = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"]
 
 STATS_QUERY = """
 query($login: String!) {
@@ -108,15 +111,6 @@ def fmt_int(n):
     return f"{n:,}".replace(",", ".")
 
 
-def fmt_stars(n):
-    return f"{n / 1000:.1f} mil".replace(".", ",") if n >= 1000 else str(n)
-
-
-def fmt_date(iso):
-    d = parse_time(iso)
-    return f"{d.day} {MONTHS[d.month - 1]} {d.year}"
-
-
 def since(iso, now):
     days = (now - parse_time(iso)).days
     if days <= 0:
@@ -128,37 +122,42 @@ def since(iso, now):
     return f"há {days // 30} meses"
 
 
-def upstream_prs():
-    query = f"is:pr is:merged is:public author:{LOGIN} -user:{LOGIN}"
-    items = api("search/issues?" + urllib.parse.urlencode({"q": query, "per_page": 100}))["items"]
-    repos = {}
-    prs = []
-    for item in items:
-        full_name = item["repository_url"].removeprefix("https://api.github.com/repos/")
-        if full_name not in repos:
-            repos[full_name] = api(f"repos/{full_name}")
-        repo = repos[full_name]
-        if repo["stargazers_count"] < MIN_STARS:
-            continue
-        prs.append(
+def latest_release(full_name):
+    try:
+        return api(f"repos/{full_name}/releases/latest")["tag_name"]
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return None
+        raise
+
+
+def last_ci(full_name, branch):
+    # Filtrar pelo workflow de CI: o último run da main costuma ser do Dependabot.
+    try:
+        runs = api(f"repos/{full_name}/actions/workflows/{CI_WORKFLOW}/runs?branch={branch}&status=completed&per_page=1")
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return None
+        raise
+    return runs["workflow_runs"][0]["conclusion"] if runs["workflow_runs"] else None
+
+
+def project_status():
+    projects = []
+    for name, tagline in PROJECTS:
+        full_name = f"{LOGIN}/{name}"
+        repo = api(f"repos/{full_name}")
+        projects.append(
             {
-                "repo": full_name,
-                "owner": repo["owner"]["login"],
-                "avatar": repo["owner"]["avatar_url"],
-                "stars": repo["stargazers_count"],
-                "number": item["number"],
-                "title": item["title"],
-                "merged_at": item["pull_request"]["merged_at"],
+                "name": name,
+                "tagline": tagline,
+                "language": repo["language"],
+                "pushed_at": repo["pushed_at"],
+                "release": latest_release(full_name),
+                "ci": last_ci(full_name, repo["default_branch"]),
             }
         )
-    prs.sort(key=lambda pr: pr["merged_at"], reverse=True)
-    return prs
-
-
-def avatar_data_uri(url):
-    sep = "&" if "?" in url else "?"
-    body, content_type = request(f"{url}{sep}s=72")
-    return f"data:{content_type};base64,{base64.b64encode(body).decode()}"
+    return projects
 
 
 def mono_text(x, y, content, fill, extra=""):
@@ -170,7 +169,7 @@ def grid_text(x, y, content, fill, extra=""):
     return mono_text(x, y, content, fill, f' textLength="{length:.1f}" lengthAdjust="spacingAndGlyphs"{extra}')
 
 
-def build_hero(stats, prs, now):
+def build_hero(stats, now):
     user = stats["user"]
     repos = user["repositories"]
     recent = next((r for r in repos["nodes"] if r["name"] != LOGIN), None)
@@ -179,10 +178,6 @@ def build_hero(stats, prs, now):
         ("repos", f"{repos['totalCount']} públicos", ""),
         ("contrib", f"{fmt_int(user['contributionsCollection']['contributionCalendar']['totalContributions'])} no último ano", ""),
     ]
-    if prs:
-        owners = list(dict.fromkeys(pr["owner"] for pr in prs))
-        label = "PR aceito" if len(prs) == 1 else "PRs aceitos"
-        github_rows.append(("upstream", ", ".join(owners), f"  {len(prs)} {label}"))
     if recent:
         github_rows.append(("ativo", recent["name"], f"  {since(recent['pushedAt'], now)}"))
 
@@ -302,59 +297,57 @@ def build_hero(stats, prs, now):
 '''
 
 
-def build_upstream(prs):
-    row_h = 66
-    header_h = 54
+def build_projects(projects, now):
+    row_h = 62
+    header_h = 50
     footer_h = 40
-    H = header_h + max(len(prs), 1) * row_h + footer_h
-    count = f"{len(prs)} PR aceito" if len(prs) == 1 else f"{len(prs)} PRs aceitos"
+    H = header_h + len(projects) * row_h + footer_h
+    with_ci = [p for p in projects if p["ci"]]
+    green = sum(p["ci"] == "success" for p in with_ci)
+    summary = f"{green}/{len(with_ci)} com CI verde na main"
+    summary_color = GREEN if green == len(with_ci) else PEACH
 
     rows = []
-    for i, pr in enumerate(prs):
+    for i, p in enumerate(projects):
         y = header_h + i * row_h
-        title = pr["title"] if len(pr["title"]) <= 78 else pr["title"][:77] + "…"
+        ci_color = {"success": GREEN, "failure": RED}.get(p["ci"], OVERLAY0)
         rows.append(
-            f'<clipPath id="av{i}"><rect x="24" y="{y + 8}" width="36" height="36" rx="9"/></clipPath>'
-            f'<image href="{avatar_data_uri(pr["avatar"])}" x="24" y="{y + 8}" width="36" height="36" clip-path="url(#av{i})"/>'
-            f'<rect x="24" y="{y + 8}" width="36" height="36" rx="9" fill="none" stroke="{SURFACE1}"/>'
-            f'<text x="76" y="{y + 22}" class="repo" fill="{TEXT}">{xml_escape(pr["repo"])}</text>'
-            f'<text x="{W - 150}" y="{y + 22}" class="meta" fill="{YELLOW}" text-anchor="end">★ <tspan fill="{SUBTEXT0}">{fmt_stars(pr["stars"])}</tspan></text>'
-            f'<text x="{W - 24}" y="{y + 22}" class="meta" fill="{OVERLAY1}" text-anchor="end">{fmt_date(pr["merged_at"])}</text>'
-            f'<svg x="76" y="{y + 32}" width="14" height="14" viewBox="0 0 16 16"><path fill="{MAUVE}" d="{MERGE_ICON}"/></svg>'
-            f'<text x="96" y="{y + 44}" class="pr" fill="{SUBTEXT1}">{xml_escape(title)}'
-            f'<tspan fill="{MAUVE}">  #{pr["number"]}</tspan></text>'
+            f'<circle cx="30" cy="{y + 17}" r="4.5" fill="{ci_color}"/>'
+            f'<text x="46" y="{y + 22}" class="repo" fill="{TEXT}">{xml_escape(p["name"])}</text>'
+            f'<text x="{W - 24}" y="{y + 22}" class="meta" fill="{OVERLAY1}" text-anchor="end">{since(p["pushed_at"], now)}</text>'
+            f'<text x="46" y="{y + 43}" class="meta" fill="{SUBTEXT1}">{xml_escape(p["tagline"])}</text>'
         )
-        if i < len(prs) - 1:
-            rows.append(f'<line x1="76" y1="{y + row_h - 4}" x2="{W - 24}" y2="{y + row_h - 4}" stroke="{SURFACE0}"/>')
-    if not prs:
-        rows.append(f'<text x="24" y="{header_h + 30}" class="pr" fill="{OVERLAY1}">nenhum PR aceito ainda</text>')
+        if p["release"]:
+            rows.append(
+                f'<text x="{W - 130}" y="{y + 22}" class="meta" fill="{MAUVE}" text-anchor="end">{xml_escape(p["release"])}</text>'
+            )
+        if p["language"]:
+            lang = p["language"]
+            dot_x = W - 24 - len(lang) * 7.5 - 9
+            rows.append(
+                f'<circle cx="{dot_x:.1f}" cy="{y + 39}" r="4" fill="{LANGUAGE_COLORS.get(lang, OVERLAY1)}"/>'
+                f'<text x="{W - 24}" y="{y + 43}" class="meta" fill="{SUBTEXT0}" text-anchor="end">{xml_escape(lang)}</text>'
+            )
+        if i < len(projects) - 1:
+            rows.append(f'<line x1="46" y1="{y + row_h - 6}" x2="{W - 24}" y2="{y + row_h - 6}" stroke="{SURFACE0}"/>')
 
     body = "\n  ".join(rows)
-    return f'''<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{count} em projetos open source de terceiros">
+    return f'''<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Projetos: {", ".join(p["name"] for p in projects)}, com status do CI e última release">
   <style>
     .label {{ font-family: {SANS}; font-size: 12px; font-weight: 600; letter-spacing: 1.6px; }}
     .repo {{ font-family: {SANS}; font-size: 15px; font-weight: 600; }}
     .meta {{ font-family: {MONO}; font-size: 12.5px; }}
-    .pr {{ font-family: {MONO}; font-size: 12.5px; }}
     .note {{ font-family: {SANS}; font-size: 12px; }}
   </style>
   <rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="12" fill="{MANTLE}" stroke="{SURFACE0}"/>
   <rect x="0.5" y="14" width="3" height="{H - 28}" rx="1.5" fill="{MAUVE}"/>
-  <text x="24" y="32" class="label" fill="{SUBTEXT0}">UPSTREAM</text>
-  <circle cx="{W - 24 - len(count) * 6.6 - 12}" cy="28" r="4" fill="{GREEN}"/>
-  <text x="{W - 24}" y="32" class="note" fill="{SUBTEXT0}" text-anchor="end">{count}</text>
+  <text x="24" y="32" class="label" fill="{SUBTEXT0}">PROJETOS</text>
+  <circle cx="{W - 24 - len(summary) * 5.9 - 10:.1f}" cy="28" r="4" fill="{summary_color}"/>
+  <text x="{W - 24}" y="32" class="note" fill="{SUBTEXT0}" text-anchor="end">{summary}</text>
   {body}
-  <text x="24" y="{H - 16}" class="note" fill="{OVERLAY0}">pull requests aceitos em projetos de terceiros com {MIN_STARS}+ estrelas</text>
+  <text x="24" y="{H - 16}" class="note" fill="{OVERLAY0}">último CI na main, release mais recente e último push · atualizado todo dia</text>
 </svg>
 '''
-
-
-# Octicon git-merge-16 (MIT).
-MERGE_ICON = (
-    "M5.45 5.154A4.25 4.25 0 0 0 9.25 7.5h1.378a2.251 2.251 0 1 1 0 1.5H9.25A5.734 5.734 0 0 1 5 7.123v3.505"
-    "a2.25 2.25 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.95-.218ZM4.25 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-    "m8.5-4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM5 3.25a.75.75 0 1 0 0 .005V3.25Z"
-)
 
 
 def main():
@@ -362,10 +355,10 @@ def main():
         raise SystemExit("GITHUB_TOKEN ausente: a API GraphQL exige autenticação")
     now = datetime.now(timezone.utc)
     stats = graphql(STATS_QUERY, login=LOGIN)
-    prs = upstream_prs()
+    projects = project_status()
 
     os.makedirs(OUT_DIR, exist_ok=True)
-    for name, svg in (("hero.svg", build_hero(stats, prs, now)), ("upstream.svg", build_upstream(prs))):
+    for name, svg in (("hero.svg", build_hero(stats, now)), ("projects.svg", build_projects(projects, now))):
         path = os.path.join(OUT_DIR, name)
         with open(path, "w", encoding="utf-8") as f:
             f.write(svg)
