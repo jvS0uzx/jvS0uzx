@@ -13,6 +13,8 @@ on:
     paths-ignore:
       - 'assets/contributions.png'
       - 'assets/private-contributions.svg'
+      - 'assets/hero.svg'
+      - 'assets/upstream.svg'
 
 jobs:
   build:
@@ -25,6 +27,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Generate hero and upstream cards
+        env:
+          GITHUB_LOGIN: jvS0uzx
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUT_DIR: assets
+        run: python3 scripts/generate_profile.py
       - name: Checkout isometric renderer
         uses: actions/checkout@v4
         with:
@@ -52,6 +60,8 @@ jobs:
           path: |
             assets/contributions.png
             assets/private-contributions.svg
+            assets/hero.svg
+            assets/upstream.svg
           retention-days: 1
 
   publish:
@@ -72,6 +82,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/contributions.png assets/private-contributions.svg
+          git add assets/contributions.png assets/private-contributions.svg assets/hero.svg assets/upstream.svg
           git diff --staged --quiet || git commit -m "chore: refresh profile assets"
           git push

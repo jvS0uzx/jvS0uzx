@@ -1,5 +1,17 @@
 <p align="center">
-  <img src="assets/battle.svg" alt="Batalha Pokémon em pixel art: o Hiper Raio de um Rayquaza selvagem tira 1 HP do Snorlax, que acorda e nocauteia o Rayquaza com um Mega Push" width="100%" />
+  <img src="assets/hero.svg" alt="Terminal kitty rodando fastfetch: Fedora Linux 44 com KDE Plasma, desenvolvedor full stack com foco em backend, automação e infra self-hosted" width="100%" />
+</p>
+
+<br>
+
+---
+
+<h3 align="center">Open source</h3>
+
+<p align="center">
+  <a href="https://github.com/search?q=is%3Apr+is%3Amerged+is%3Apublic+author%3AjvS0uzx+-user%3AjvS0uzx&type=pullrequests">
+    <img src="assets/upstream.svg" alt="Pull requests aceitos em projetos open source de terceiros" width="100%" />
+  </a>
 </p>
 
 <br>
@@ -31,6 +43,9 @@
 <h3 align="center">Contato</h3>
 
 <p align="center">
+  <a href="https://jvs0uzx.github.io">
+    <img src="https://img.shields.io/badge/Site-000000?style=for-the-badge&logo=githubpages&logoColor=white" alt="Site"/>
+  </a>
   <a href="https://github.com/jvS0uzx">
     <img src="https://img.shields.io/badge/GitHub-000000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
   </a>
