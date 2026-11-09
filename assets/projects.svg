@@ -14,7 +14,7 @@
   <text x="750" y="72" class="meta" fill="#cba6f7" text-anchor="end">v1.0.0</text>
   <circle cx="832.0" cy="89" r="4" fill="#00ADD8"/><text x="856" y="93" class="meta" fill="#a6adc8" text-anchor="end">Go</text>
   <line x1="46" y1="106" x2="856" y2="106" stroke="#313244"/>
-  <circle cx="30" cy="129" r="4.5" fill="#a6e3a1"/><text x="46" y="134" class="repo" fill="#cdd6f4">dockkeeper_collector</text><text x="856" y="134" class="meta" fill="#7f849c" text-anchor="end">há 6 dias</text><text x="46" y="155" class="meta" fill="#bac2de">agente que coleta o inventário de rede e se registra por convite único</text>
+  <circle cx="30" cy="129" r="4.5" fill="#a6e3a1"/><text x="46" y="134" class="repo" fill="#cdd6f4">dockkeeper_collector</text><text x="856" y="134" class="meta" fill="#7f849c" text-anchor="end">há 7 dias</text><text x="46" y="155" class="meta" fill="#bac2de">agente que coleta o inventário de rede e se registra por convite único</text>
   <text x="750" y="134" class="meta" fill="#cba6f7" text-anchor="end">v1.0.0</text>
   <circle cx="832.0" cy="151" r="4" fill="#00ADD8"/><text x="856" y="155" class="meta" fill="#a6adc8" text-anchor="end">Go</text>
   <line x1="46" y1="168" x2="856" y2="168" stroke="#313244"/>
